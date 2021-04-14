@@ -12,8 +12,25 @@ server.listen(3000);
 const arrayUrer=[];
 io.on("connection",function (socket) {
 
+
     console.log("da nguoi ket noi : " + socket.id)
 
+    //===> chat group
+    socket.on("create_room",function(data){
+
+        socket.join(data)
+        socket.phong = data
+        // const mroom = Object.keys(Map,)
+        console.log(socket.adapter.rooms)
+
+        const arrayRoom = []
+
+        io.sockets.emit("server_send_room",)
+
+    })
+
+
+    // chat
     socket.on("client_send_User",function (data) {
         console.log("User Name : " +data)
         if (arrayUrer.indexOf(data)>=0){
@@ -40,15 +57,22 @@ io.on("connection",function (socket) {
         io.sockets.emit("server_sent_message",{un:socket.UserName, nd:data})
     })
 
-    socket.on("enter_start_content",function () {
+    // check nguoi nhap
+    socket.on("enter_start_content",function (data) {
+        console.log("musername : " + data)
          const checkTB = socket.UserName + " đang trả lời"
          io.sockets.emit("sever_start_content",checkTB)
     })
+    //check nguoi nhap
     socket.on("enter_stop_content",function () {
         console.log(socket.UserName + " : toi ngung go")
         io.sockets.emit("sever_stop_content")
     })
 })
+
+
+
+
 
 app.get("/",function (req,res) {
     res.render("trangchu");

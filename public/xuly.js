@@ -1,10 +1,13 @@
 const socket = io("http://localhost:3000/");
+
+
 //that bai
 socket.on("server_send_fail",function () {
         alert("đã có UserName dk rôi !");
 })
 //thanh cong
 socket.on("server_send_succsess",function (data) {
+
     $("#currentUser").html(data);
     $("#loginForm").hide(2000);
     $("#chatForm").show(1000);
@@ -26,6 +29,17 @@ socket.on("sever_start_content",function (data) {
 })
 socket.on("sever_stop_content",function () {
     $("#thongbao").html("")
+})
+
+//=============>  chat roomm <=================
+
+socket.on("server_send_room", function(data) {
+    // data.map(function(r){
+    for(let i in data){
+        $('#dsroom').append("<h4>"+ data[i] +"</h4>")
+    }
+
+    // })
 })
 
 $(document).ready(function () {
@@ -50,4 +64,10 @@ $(document).ready(function () {
     $("#txtMessage").focusout(function () {
         socket.emit("enter_stop_content")
     })
+
+    // tao room
+    $("#btn_createroom").click(function () {
+        socket.emit("create_room",$("#txt_room").val())
+    })
 });
+ 
